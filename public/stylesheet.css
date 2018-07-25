@@ -1,3 +1,29 @@
 body {
-    background-color: red;
+    /* background-color: rgb(8, 8, 8); */
+    color: black;
+    font: 13px sans-serif;
+}
+input {
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+
+    display: flex;
+    border: 0;
+    padding: 5px;
+    margin: 0;
+    background: transparent;
+    font: 13px sans-serif;
+    background-color: white;
+    width: 100px;
+    height: 20px;
+}
+input[type="text"]:focus {
+    color: black;
+    background: yellow;
+}
+.main-logo {
+    max-height: 100px;
+    max-width: 100px;
+    object-fit: cover;
 }

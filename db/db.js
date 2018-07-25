@@ -16,32 +16,20 @@ exports.saveNewUser = function(firstname, lastname, email, password) {
         return results.rows[0].id;
     });
 };
-// exports.getPasswordDB = function(email) {
-//     const params = [email];
-//     return db
-//         .query("SELECT hashed_password FROM users WHERE email = $1;", params)
-//         .then(results => {
-//             return results.rows[0];
-//         });
-// };
-//
-// exports.getEmails = function(email) {
-//     const params = [email];
-//     return db
-//         .query("SELECT * FROM users WHERE email = $1;", params)
-//         .then(results => {
-//             return results.rows[0];
-//         });
-// };
+exports.getPasswordDB = function(email) {
+    const params = [email];
+    return db
+        .query("SELECT hashed_password FROM users WHERE email = $1;", params)
+        .then(results => {
+            return results.rows[0];
+        });
+};
 
-// exports.saveProfile = function(user_id, age, city, homepage) {
-//     const q = `
-//         INSERT INTO user_profiles (user_id, age, city, url)
-//         VALUES ($1, $2, $3, $4)
-//         RETURNING *
-//         `;
-//     const params = [user_id, age || null, city || null, homepage || null];
-//     return db.query(q, params).then(results => {
-//         return results.rows[0];
-//     });
-// };
+exports.getEmails = function(email) {
+    const params = [email];
+    return db
+        .query("SELECT * FROM users WHERE email = $1;", params)
+        .then(results => {
+            return results.rows[0];
+        });
+};

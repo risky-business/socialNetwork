@@ -6,6 +6,7 @@ const bc = require("./db/bcrypt.js");
 const bcrypt = require("./db/bcrypt");
 const db = require("./db/db.js");
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,6 +21,13 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
+
+app.use(csurf());
+
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -70,6 +78,52 @@ app.post("/registration", (req, res) => {
         });
     }
 });
+
+app.post("/login", (req, res) => {
+    db.getEmails(req.body.email).then(userInfo => {
+        if (userInfo && userInfo.email) {
+            bcrypt
+                .checkPassword(req.body.password, userInfo.hashed_password)
+                .then(passwordsMatch => {
+                    if (passwordsMatch) {
+                        req.session.user = {
+                            id: userInfo.id,
+                            firstName: userInfo.first_name,
+                            lastName: userInfo.last_name,
+                            email: userInfo.email,
+                            hashedPassword: userInfo.hashed_password
+                        };
+                        res.json({
+                            success: true,
+                            id: userInfo.id,
+                            first_name: userInfo.first_name,
+                            last_name: userInfo.last_name,
+                            email: userInfo.email,
+                            hashedPassword: userInfo.hashed_password
+                        });
+                    } else {
+                        res.json({
+                            success: false,
+                            error: "Enter Correct password"
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.json({
+                        success: false,
+                        error: "Wrong"
+                    });
+                });
+        } else {
+            res.json({
+                success: false,
+                error: "Email not found"
+            });
+        }
+    });
+});
+
 app.get("/welcome", (req, res) => {
     if (req.session.user) {
         console.log("no user ID found, redirecting to ...");
@@ -77,6 +131,10 @@ app.get("/welcome", (req, res) => {
     } else {
         res.sendFile(__dirname + "/index.html");
     }
+});
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/welcome");
 });
 
 app.get("*", checkForLog, function(req, res) {

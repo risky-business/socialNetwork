@@ -1,13 +1,23 @@
 import React from "react";
+import { HashRouter, Route, Link } from "react-router-dom";
 import Registration from "./Registration";
-// import Logo from "./Logo";
+
+import Login from "./Login";
 
 function Welcome() {
     return (
         <div>
-            <h1>Welcome</h1>
+            <img className="main-logo" src="/logo.png" />
 
-            <Registration />
+            <HashRouter>
+                <div>
+                    <nav>
+                        <Link to="/Login">Log in </Link>
+                    </nav>
+                    <Route exact path="/" component={Registration} />
+                    <Route exact path="/Login" component={Login} />
+                </div>
+            </HashRouter>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
 
 class Registration extends React.Component {
     constructor() {
@@ -42,31 +42,33 @@ class Registration extends React.Component {
 
                 {this.state.error ? <div>ERROR: {this.state.error}</div> : null}
                 <form onSubmit={this.handleSubmit}>
-                    <input
-                        onChange={this.handleChange}
-                        name="firstname"
-                        placeholder="name"
-                        type="text"
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        name="lastname"
-                        placeholder="lastName"
-                        type="text"
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        name="email"
-                        placeholder="email"
-                        type="text"
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        name="password"
-                        placeholder="password"
-                        type="text"
-                    />
-                    <button type="submit">Submit</button>
+                    <div className="registration-input">
+                        <input
+                            onChange={this.handleChange}
+                            name="firstname"
+                            placeholder="name"
+                            type="text"
+                        />
+                        <input
+                            onChange={this.handleChange}
+                            name="lastname"
+                            placeholder="lastName"
+                            type="text"
+                        />
+                        <input
+                            onChange={this.handleChange}
+                            name="email"
+                            placeholder="email"
+                            type="text"
+                        />
+                        <input
+                            onChange={this.handleChange}
+                            name="password"
+                            placeholder="password"
+                            type="text"
+                        />
+                        <button type="submit">Submit</button>
+                    </div>
                 </form>
             </div>
         );

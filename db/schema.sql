@@ -9,10 +9,3 @@ CREATE TABLE users (
     hashed_password VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
--- CREATE TABLE user_profiles (
---     id SERIAL PRIMARY KEY,
---     user_id INT NOT NULL REFERENCES users(id) UNIQUE,
---     age VARCHAR(50),
---     city VARCHAR(50),
---     url VARCHAR(50)
--- );
