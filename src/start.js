@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./Welcome";
-import Logo from "./Logo";
-import axios from "./axios";
+import App from "./App";
 
 ReactDOM.render(
-    location.pathname == "/welcome" ? <Welcome /> : <Logo />,
+    location.pathname == "/welcome" ? <Welcome /> : <App />,
     document.querySelector("main")
 );

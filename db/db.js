@@ -33,3 +33,42 @@ exports.getEmails = function(email) {
             return results.rows[0];
         });
 };
+
+exports.changeUserPic = function(user_id, image_url) {
+    const params = [user_id, image_url];
+    const q = `
+        UPDATE users SET
+        image_url = $2
+        WHERE id = $1
+        RETURNING *;
+        `;
+    return db.query(q, params).then(userInfo => {
+        return userInfo.rows[0].image_url;
+    });
+};
+
+exports.getUserById = function(id) {
+    console.log("logging id being passed to db getUserById: ", id);
+    const params = [id];
+    return db
+        .query("SELECT * FROM users WHERE id = $1;", params)
+        .then(results => {
+            console.log(
+                "logging results.rows[0] on db getUserById: ",
+                results.rows[0]
+            );
+            return results.rows[0];
+        });
+};
+exports.saveBio = function(id, bio) {
+    const params = [id, bio];
+    const q = `
+        UPDATE users SET
+        bio = $2
+        WHERE id = $1
+        RETURNING *;
+        `;
+    return db.query(q, params).then(userInfo => {
+        return userInfo.rows[0].bio;
+    });
+};
