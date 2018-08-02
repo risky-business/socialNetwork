@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "./axios";
 import ProfilePic from "./profilePic";
 
 class Profile extends Component {
@@ -19,7 +18,6 @@ class Profile extends Component {
         const {
             firstName,
             lastName,
-            id,
             image,
             bio,
             showBio,
@@ -27,7 +25,6 @@ class Profile extends Component {
             setBio,
             showUploader
         } = this.props;
-        console.log(firstName, lastName);
 
         return (
             <div id="profile">
@@ -43,7 +40,14 @@ class Profile extends Component {
 
                 {bio ? (
                     <p>
-                        {bio} <span onClick={toggleShowBio}> Edit</span>{" "}
+                        {bio}{" "}
+                        <span onClick={toggleShowBio}>
+                            {" "}
+                            <em>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click
+                            </em>{" "}
+                            here to Edit
+                        </span>{" "}
                     </p>
                 ) : (
                     <p onClick={toggleShowBio}>Click here to write a bio</p>

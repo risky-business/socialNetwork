@@ -38,7 +38,7 @@ class Registration extends React.Component {
     render() {
         return (
             <div>
-                <h1>Registration</h1>
+                <h1 className="registration-title">Registration</h1>
 
                 {this.state.error ? <div>ERROR: {this.state.error}</div> : null}
                 <form onSubmit={this.handleSubmit}>

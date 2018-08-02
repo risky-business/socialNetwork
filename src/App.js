@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import Logo from "./Logo";
 import axios from "./axios";
-
+import Opp from "./opp";
 import Uploader from "./Uploader";
 import { BrowserRouter, Route } from "react-router-dom";
 import Profile from "./Profile";
@@ -100,6 +100,7 @@ class App extends Component {
                                 />
                             )}
                         />
+                        <Route exact path="/user/:id" component={Opp} />
                     </div>
                 </BrowserRouter>
             </div>

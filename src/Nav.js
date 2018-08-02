@@ -10,13 +10,19 @@ function Nav(props) {
                     </a>
                 </li>
                 <li className="item">
-                    <a href="/">Profile</a>
-                </li>
-                <li className="item">
                     <a href="/logout">Logout</a>
                 </li>
                 <li className="item">
-                    <img className="logo" src={props.image} />
+                    <a href="/">Profile</a>
+                </li>
+                <li className="item">
+                    <a href="/">Friends List</a>
+                </li>
+
+                <li className="item">
+                    <a href="/">
+                        <img className="logo" src={props.image} />
+                    </a>
                 </li>
             </ul>
         </nav>

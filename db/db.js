@@ -72,3 +72,62 @@ exports.saveBio = function(id, bio) {
         return userInfo.rows[0].bio;
     });
 };
+exports.getCurrentStatus = function(sender_id, receiver_id) {
+    const params = [sender_id, receiver_id];
+    const q = `
+        SELECT * FROM friendships
+        WHERE ((sender_id = $1 AND receiver_id = $2)
+        OR (sender_id = $2 AND receiver_id = $1))
+        `;
+    return db
+        .query(q, params)
+        .then(results => {
+            console.log("results.rows[0] during get: ", results.rows[0]);
+            return results.rows[0];
+        })
+        .catch(err => {
+            return err;
+        });
+};
+
+exports.setStatus = function(sender_id, receiver_id) {
+    const params = [sender_id, receiver_id];
+    const q = `
+        INSERT INTO friendships (sender_id, receiver_id)
+        VALUES ($1, $2)
+        RETURNING *;
+        `;
+    return db.query(q, params).then(results => {
+        console.log("results.rows[0] in post: ", results.rows[0]);
+        return results.rows[0];
+    });
+};
+
+exports.deleteFriend = function(sender_id, receiver_id) {
+    console.log("delete happening in db");
+    const params = [sender_id, receiver_id];
+    const q = `
+        DELETE FROM friendships
+        WHERE ((sender_id = $1 AND receiver_id = $2)
+        OR (sender_id = $2 AND receiver_id = $1));
+        `;
+    return db.query(q, params).then(results => {
+        console.log("results.rows[0] in delete db: ", results.rows[0]);
+        return results.rows[0];
+    });
+};
+
+exports.acceptFriend = function(sender_id, receiver_id) {
+    console.log("accept happening in db");
+    const params = [sender_id, receiver_id];
+    const q = `
+        UPDATE friendships
+        SET status = 2
+        WHERE ((sender_id = $1 AND receiver_id = $2)
+        OR (sender_id = $2 AND receiver_id = $1));
+        `;
+    return db.query(q, params).then(results => {
+        console.log("results.rows[0] in accept db: ", results.rows[0]);
+        return results.rows[0];
+    });
+};
