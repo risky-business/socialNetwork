@@ -68,7 +68,7 @@ input[type="text"]:focus {
     top: 0;
     left: 0;
 }
-/*  Nav transition*/
+/* *************************** Nav transition*/
 ol,
 ul {
     list-style: none;
@@ -137,4 +137,72 @@ a:focus::before {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+#profile {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*******************Registration page****************************************/
+
+.registration-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.registration-input {
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+    align-items: center;
+}
+
+/**********************login page*******************************************/
+.login-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-input {
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+    align-items: center;
+}
+
+/********************oop page**************************************************/
+
+textarea {
+    resize: none;
+    width: 300px;
+    height: 200px;
+}
+#opp {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+/************************ Friendship button/ buttons ********************************/
+
+button {
+    border-radius: 3px;
+    background-color: black;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+button:hover {
+    opacity: 1;
 }
