@@ -131,3 +131,26 @@ exports.acceptFriend = function(sender_id, receiver_id) {
         return results.rows[0];
     });
 };
+
+exports.getUsersByIds = function(ids) {
+    const params = [ids];
+    const q = `SELECT * FROM users WHERE id = ANY($1)`;
+    return db.query(q, params).then(results => {
+        console.log("results.rows in accept db: ", results.rows);
+        return results.rows;
+    });
+};
+exports.getFriendsAndWannabes = function(userId) {
+    const q = `
+           SELECT users.id, users.first_name, users.last_name, users.image_url, friendships.status
+           FROM friendships
+           JOIN users
+           ON (status = 1 AND receiver_id = $1 AND sender_id = users.id)
+           OR (status = 2 AND receiver_id = $1 AND sender_id = users.id)
+           OR (status = 2 AND sender_id = $1 AND receiver_id = users.id)
+       `;
+    const params = [userId];
+    return db.query(q, params).then(results => {
+        return results.rows;
+    });
+};

@@ -16,7 +16,7 @@ function Nav(props) {
                     <a href="/">Profile</a>
                 </li>
                 <li className="item">
-                    <a href="/">Friends List</a>
+                    <a href="/friends-list/">Friends List</a>
                 </li>
 
                 <li className="item">

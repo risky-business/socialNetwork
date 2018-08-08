@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-// import Logo from "./Logo";
 import axios from "./axios";
 import Opp from "./opp";
 import Uploader from "./Uploader";
 import { BrowserRouter, Route } from "react-router-dom";
 import Profile from "./Profile";
-
+import Friends from "./friends";
 import Nav from "./Nav";
 
 class App extends Component {
@@ -15,7 +14,7 @@ class App extends Component {
         this.state = {
             showBio: false
         };
-
+        this.hideUploader = this.hideUploader.bind(this);
         this.showUploader = this.showUploader.bind(this);
         this.setImage = this.setImage.bind(this);
         this.toggleShowBio = this.toggleShowBio.bind(this);
@@ -28,6 +27,12 @@ class App extends Component {
     showUploader() {
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible
+        });
+    }
+
+    hideUploader() {
+        this.setState({
+            uploaderIsVisible: false
         });
     }
     toggleShowBio() {
@@ -77,7 +82,10 @@ class App extends Component {
                                 id="close-button"
                                 className="fas fa-times-circle"
                             />
-                            <Uploader setImage={this.setImage} />
+                            <Uploader
+                                setImage={this.setImage}
+                                hideUploader={this.hideUploader}
+                            />
                         </div>
                     </div>
                 )}
@@ -97,10 +105,12 @@ class App extends Component {
                                     toggleShowBio={this.toggleShowBio}
                                     setBio={this.setBio}
                                     showUploader={this.showUploader}
+                                    hideUploader={this.hideUploader}
                                 />
                             )}
                         />
                         <Route exact path="/user/:id" component={Opp} />
+                        <Route path="/friends-list" component={Friends} />
                     </div>
                 </BrowserRouter>
             </div>

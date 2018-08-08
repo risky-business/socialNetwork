@@ -23,68 +23,124 @@ class FriendButton extends Component {
                     buttonText: "Send friend request",
                     status: null
                 });
-            } else if (data.status == 1) {
-                if (data.sessionUserId == data.receiverId) {
+            } else {
+                console.log("there is data! ", data);
+                this.setState({
+                    sessionUserId: data.sessionUserId,
+                    receiverId: data.receiverId,
+                    senderId: data.senderId
+                });
+                if (data.status == 1) {
+                    if (this.state.sessionUserId == this.state.senderId) {
+                        console.log("if im the sender (Cancel Invitation)");
+                        this.setState({
+                            buttonText: "Cancel Invitation",
+                            status: 1
+                        });
+                    } else if (
+                        this.state.sessionUserId == this.state.receiverId
+                    ) {
+                        console.log("if im the receiver (Accept Invitation)");
+                        this.setState({
+                            buttonText: "Accept Invitation",
+                            status: 1
+                        });
+                    }
+                } else if (data.status == 2) {
                     this.setState({
-                        buttonText: "Accept Invitation",
-                        status: 1
-                    });
-                } else {
-                    this.setState({
-                        buttonText: "Cancel Invitation",
-                        status: 1
+                        buttonText: "End friendship",
+                        status: 2
                     });
                 }
-            } else if (data.status == 2) {
-                this.setState({
-                    buttonText: "End friendship",
-                    status: 2
-                });
             }
         });
     }
     sendRequest() {
-        console.log("current status is: ", this.state.status);
-        if (!this.state.status) {
+        if (!this.state.status || this.state.status == null) {
             this.inviteFriend();
         } else if (this.state.status == 1) {
-            this.acceptFriend();
+            if (this.state.sessionUserId == this.state.senderId) {
+                this.terminateFriend();
+            } else if (this.state.sessionUserId == this.state.receiverId) {
+                this.acceptFriend();
+            }
         } else if (this.state.status == 2) {
             this.terminateFriend();
         }
-        this.updateButton();
     }
     inviteFriend() {
         console.log("invite happening");
         axios.post("/friend/" + this.props.id + ".json").then(({ data }) => {
             this.setState({
-                buttonText: "Cancel Invitation",
-                status: 1
+                status: 1,
+                sessionUserId: data.sessionUserId,
+                receiverId: data.receiverId,
+                senderId: data.senderId
             });
+            console.log("after invite return of data");
+            console.log("this.state.sessionUserId: ", this.state.sessionUserId);
+            console.log("this.state.senderId: ", this.state.senderId);
+            if (this.state.sessionUserId == this.state.senderId) {
+                console.log("if im the sender (Cancel Invitation)");
+                this.setState({
+                    buttonText: "Cancel Invitation"
+                });
+            } else if (this.state.sessionUserId == this.state.receiverId) {
+                console.log("if im the receiver (Accept Invitation)");
+                this.setState({
+                    buttonText: "Accept Invitation"
+                });
+            }
         });
     }
     terminateFriend() {
+        console.log("terminate happening");
+        this.setState({
+            buttonText: "Send friend request",
+            status: null
+        });
         axios.post("/terminate/" + this.props.id + ".json").then(({ data }) => {
+            console.log("inside returned data of terminate");
             this.setState({
-                buttonText: "Send friend request",
-                status: false
+                sessionUserId: data.sessionUserId,
+                receiverId: data.receiverId,
+                senderId: data.senderId
             });
         });
     }
     acceptFriend() {
+        console.log("accept happening");
+        this.setState({
+            buttonText: "End friendship",
+            status: 2
+        });
         axios.post("/accept/" + this.props.id + ".json").then(({ data }) => {
             console.log("Axios post of accept friend in button");
             this.setState({
-                buttonText: "End friendship",
-                status: 2
+                sessionUserId: data.sessionUserId,
+                receiverId: data.receiverId,
+                senderId: data.senderId
             });
         });
     }
     render() {
+        var friendButtonStyle = {
+            textAlign: "center"
+        };
+        var button = {
+            width: "auto",
+            height: "auto",
+            margin: 0
+        };
         const { buttonText } = this.state;
+        if (!this.props.id) {
+            return null;
+        }
         return (
-            <div id="FriendButton">
-                <button onClick={this.sendRequest}>{buttonText}</button>
+            <div id="FriendButton" style={friendButtonStyle}>
+                <button style={button} onClick={this.sendRequest}>
+                    {buttonText}
+                </button>
             </div>
         );
     }

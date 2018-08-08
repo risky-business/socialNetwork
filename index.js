@@ -80,6 +80,8 @@ app.post("/registration", (req, res) => {
             db.saveNewUser(firstname, lastname, email, hashedPassword)
                 .then(id => {
                     console.log("NEW USER SAVED!");
+                    req.session.userId = id;
+
                     req.session.user = {
                         id: id,
                         firstname: lastname,
@@ -107,6 +109,7 @@ app.post("/login", (req, res) => {
                 .checkPassword(req.body.password, userInfo.hashed_password)
                 .then(passwordsMatch => {
                     if (passwordsMatch) {
+                        req.session.userId = userInfo.id;
                         req.session.user = {
                             id: userInfo.id,
                             firstName: userInfo.first_name,
@@ -232,6 +235,13 @@ app.post("/friend/:id.json", (req, res) => {
             });
         });
 });
+app.post("/endfriendship/:id.json", function(req, res) {
+    db.deleteFriend(req.params.id, req.session.userId).then(friendInfo => {
+        console.log("friendInfo in friendship route", friendInfo);
+
+        res.json(friendInfo);
+    });
+});
 
 app.post("/terminate/:id.json", (req, res) => {
     console.log("beggining of delete post in server");
@@ -268,6 +278,17 @@ app.post("/accept/:id.json", (req, res) => {
                 sessionUserId: req.session.user.id,
                 status: 2
             });
+        });
+});
+app.get("/friends.getwannabes", function(req, res) {
+    console.log("mario has a  .....V", req.session.userId);
+    db.getFriendsAndWannabes(req.session.userId)
+        .then(data => {
+            console.log("get your friends ", data);
+            res.json({ data });
+        })
+        .catch(error => {
+            console.log("error in get your friends", error);
         });
 });
 
