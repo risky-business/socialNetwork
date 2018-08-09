@@ -18,6 +18,12 @@ function Nav(props) {
                 <li className="item">
                     <a href="/friends-list/">Friends List</a>
                 </li>
+                <li className="item">
+                    <a href="/Chat/">Chat</a>
+                </li>
+                <li className="item">
+                    <a href="/online/">Online Users</a>
+                </li>
 
                 <li className="item">
                     <a href="/">

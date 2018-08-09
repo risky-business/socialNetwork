@@ -206,3 +206,15 @@ button {
 button:hover {
     opacity: 1;
 }
+
+/* ******************************* online Users********************/
+
+.online-user-pic {
+    width: 300px;
+    height: 200px;
+}
+
+.profile-pic-chat {
+    width: 200px;
+    height: 100px;
+}

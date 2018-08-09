@@ -11,7 +11,17 @@ const uidSafe = require("uid-safe");
 const path = require("path");
 const s3 = require("./s3");
 const config = require("./config");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -35,13 +45,6 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.use(compression());
-
-app.use(
-    cookieSession({
-        secret: `I'm always hangry.`,
-        maxAge: 1000 * 60 * 60 * 24 * 14
-    })
-);
 
 app.use(csurf());
 
@@ -317,6 +320,71 @@ app.get("*", checkForLog, function(req, res) {
     res.sendFile(__dirname + "/index.html");
 });
 
-app.listen(8080, function() {
+let onlineUsers = {};
+let chatMessages = [];
+
+io.on("connection", function(socket) {
+    onlineUsers[socket.id] = socket.request.session.user.id;
+    console.log("online useeers", onlineUsers);
+    db.getUsersInfosByIds(Object.values(onlineUsers)).then(users => {
+        console.log("online users are : ", users);
+        socket.emit("onlineUsers", users);
+    });
+
+    socket.emit("chatMessages", chatMessages.slice(-10));
+
+    if (
+        Object.values(onlineUsers).filter(
+            id => id == socket.request.session.user.id
+        ).length == 1
+    ) {
+        db.getUserById(socket.request.session.user.id)
+            .then(results => {
+                socket.broadcast.emit("userJoined", results);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    socket.on("disconnect", function() {
+        if (
+            Object.values(onlineUsers).filter(
+                id => id == socket.request.session.user.id
+            ).length == 1
+        ) {
+            db.getUserById(socket.request.session.user.id)
+                .then(results => {
+                    socket.broadcast.emit("userLeft", results);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+        delete onlineUsers[socket.id];
+    });
+
+    socket.on("newMessage", function(newMessage) {
+        db.getUserById(socket.request.session.user.id)
+            .then(data => {
+                let completNewMessage = {
+                    firstName: data.first_name,
+                    lastName: data.last_name,
+                    profilePic: data.image_url,
+                    userId: socket.request.session.user.id,
+                    content: newMessage,
+                    date: new Date()
+                };
+
+                chatMessages = [...chatMessages, completNewMessage];
+                io.sockets.emit("newMessageBack", completNewMessage);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    });
+});
+
+server.listen(8080, function() {
     console.log("I'm listening.");
 });
