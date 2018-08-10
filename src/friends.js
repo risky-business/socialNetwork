@@ -29,38 +29,60 @@ class Friends extends Component {
         }
         var listOfFriends = (
             <div>
-                <h1>Friends:</h1>
-                {friend.map(user => (
-                    <div key={user.id}>
-                        <p>
-                            {user.first_name} {user.last_name}
-                        </p>
-                        <button
-                            onClick={e => this.endFriendshipButton(user.id, e)}
-                        >
-                            End Friendship
-                        </button>
-                    </div>
-                ))}
+                <h1 className="online-title">Friends</h1>
+                <div className="online-users">
+                    {friend.map(user => (
+                        <div key={user.id}>
+                            <img
+                                className="online-user-pic"
+                                src={user.image_url || "/images/default.png"}
+                                onClick={() =>
+                                    (location.href = "/user/" + user.id)
+                                }
+                            />
+                            <p className="name-title">
+                                {user.first_name} {user.last_name}
+                            </p>
+                            <div id="button-friends">
+                                <button
+                                    onClick={e =>
+                                        this.endFriendshipButton(user.id, e)
+                                    }
+                                >
+                                    End Friendship
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
 
         var listOfPendingFriends = (
             <div>
-                <h1>Pending friends request.</h1>
+                <h1>Pending friends request</h1>
                 {pending.map(user => {
                     return (
                         <div key={user.id}>
-                            <p>
+                            <img
+                                className="online-user-pic"
+                                src={user.image_url || "/images/default.png"}
+                                onClick={() =>
+                                    (location.href = "/user/" + user.id)
+                                }
+                            />
+                            <p className="name-title">
                                 {user.first_name} {user.last_name}
                             </p>
-                            <button
-                                onClick={e =>
-                                    this.acceptFriendsButton(user.id, e)
-                                }
-                            >
-                                Accept
-                            </button>
+                            <div id="button-friends">
+                                <button
+                                    onClick={e =>
+                                        this.acceptFriendsButton(user.id, e)
+                                    }
+                                >
+                                    Accept
+                                </button>
+                            </div>
                         </div>
                     );
                 })}
@@ -72,14 +94,20 @@ class Friends extends Component {
                 <div>
                     {!friend.length && <div>No friend request</div>}
                     {!!friend.length && (
-                            <h3>Those people want to be your friend</h3>
+                            <h3>
+                                These People would like to be friends, yes or
+                                no?
+                            </h3>
                         ) &&
                         listOfFriends}
                 </div>
-                <div>
-                    {!pending.length && <div>No pendings request :(</div>}
+                <div id="button-friends">
+                    {!pending.length && <div>pendings request... none :(</div>}
                     {!!pending.length && (
-                            <h3>Those people want to be your friend</h3>
+                            <h3>
+                                These People would like to be friends, yes or
+                                no?
+                            </h3>
                         ) &&
                         listOfPendingFriends}
                 </div>

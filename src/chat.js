@@ -29,22 +29,31 @@ class Chat extends React.Component {
         let chatMsgs = chatMessages.slice(-10);
         const chatDiv = (
             <div>
-                <h1>Chat</h1>
+                <h1 className="chat-title">Chat</h1>
                 <div className="chatMessages">
                     {chatMsgs.map(message => (
                         <div key={message.date} className="message">
-                            <img
-                                className="profile-pic-chat"
-                                src={
-                                    message.profilePic || "/images/default.png"
-                                }
-                            />{" "}
-                            {message.date}
-                            <div className="userName">
-                                {message.firstName} {message.lastName}
+                            <div id="flexrow">
+                                <img
+                                    className="profile-pic-chat"
+                                    src={
+                                        message.profilePic ||
+                                        "/images/default.png"
+                                    }
+                                />{" "}
                             </div>
-                            <div className="message-content">
-                                {message.content}
+                            <div>
+                                <div className="message-content">
+                                    <p>{message.content}</p>
+                                </div>
+                                <div className="userName">
+                                    <h5>
+                                        {message.firstName} {message.lastName}
+                                    </h5>
+                                </div>
+                                <h6>
+                                    <p>{message.date}</p>
+                                </h6>
                             </div>
                         </div>
                     ))}

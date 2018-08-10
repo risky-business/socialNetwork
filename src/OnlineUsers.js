@@ -8,15 +8,18 @@ class OnlineUsers extends React.Component {
         }
         const onlineUsersDiv = (
             <div>
-                <h1>Online</h1>
+                <h1 className="online-title">Online</h1>
                 <div className="online-users">
                     {onlineUsers.map(user => (
                         <div key={user.id} className="friend">
                             <img
                                 className="online-user-pic"
                                 src={user.image_url || "/images/default.png"}
+                                onClick={() =>
+                                    (location.href = "/user/" + user.id)
+                                }
                             />
-                            <div>
+                            <div className="name-title">
                                 {user.first_name} {user.last_name}
                             </div>
                         </div>

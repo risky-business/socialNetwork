@@ -48,7 +48,7 @@ class FriendButton extends Component {
                     }
                 } else if (data.status == 2) {
                     this.setState({
-                        buttonText: "End friendship",
+                        buttonText: "Stop friendship",
                         status: 2
                     });
                 }
@@ -75,7 +75,8 @@ class FriendButton extends Component {
                 status: 1,
                 sessionUserId: data.sessionUserId,
                 receiverId: data.receiverId,
-                senderId: data.senderId
+                senderId: data.senderId,
+                buttonText: "Cancel Invitation"
             });
             console.log("after invite return of data");
             console.log("this.state.sessionUserId: ", this.state.sessionUserId);
@@ -111,7 +112,7 @@ class FriendButton extends Component {
     acceptFriend() {
         console.log("accept happening");
         this.setState({
-            buttonText: "End friendship",
+            buttonText: "Stop friendship",
             status: 2
         });
         axios.post("/accept/" + this.props.id + ".json").then(({ data }) => {
